@@ -49,7 +49,7 @@ docker compose up --build
 ```
 
 This starts:
-- PostgreSQL on `localhost:5432`
+- PostgreSQL on `localhost:5433` by default (override with `POSTGRES_HOST_PORT`)
 - Application on `localhost:8080`
 
 ### Option 2: Run Database In Docker, App Locally
@@ -58,6 +58,12 @@ Start database:
 
 ```bash
 docker compose up postgres
+```
+
+If you run the app locally against the Compose database, use:
+
+```text
+DB_URL=jdbc:postgresql://localhost:5433/loanapp
 ```
 
 Run application from project root:
