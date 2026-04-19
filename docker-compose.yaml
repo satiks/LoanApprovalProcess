@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: loanuser
       POSTGRES_PASSWORD: loanpass
     ports:
-      - "${POSTGRES_HOST_PORT:-5433}:5432"
+      - "${POSTGRES_HOST_PORT:-5435}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
