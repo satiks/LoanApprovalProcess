@@ -1,0 +1,41 @@
+# VCS
+.git
+.gitignore
+
+# Maven/Java build output
+target/
+out/
+
+# Local/IDE files
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+logs/
+tmp/
+
+# Environment and secrets
+.env
+.env.*
+
+# Docker artifacts
+Dockerfile*
+docker-compose*.yml
+docker-compose*.yaml
+
+# Docs
+README*
+HELP.md
+
+# Tests and reports (optional in image build context)
+**/surefire-reports/
+**/failsafe-reports/
