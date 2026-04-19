@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coop Laenuotsuste süsteem</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <div>
+        <strong>COOP LOAN DESK</strong>
+        <span>Student demo interface</span>
+      </div>
+    </div>
+
+    <nav class="tabs">
+      <button class="nav-tab active" type="button" data-tab="submit">Submit</button>
+      <button class="nav-tab" type="button" data-tab="review">Review</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="page active" id="page-submit">
+      <div class="page-header">
+        <h1>New Loan Application</h1>
+        <p>Fill the form and send it to the backend.</p>
+      </div>
+
+      <div class="card">
+        <h2>Applicant information</h2>
+        <div class="form-grid two-columns">
+          <div class="field">
+            <label for="s-firstName">First Name</label>
+            <input id="s-firstName" type="text" placeholder="Mari" maxlength="32" />
+          </div>
+          <div class="field">
+            <label for="s-lastName">Last Name</label>
+            <input id="s-lastName" type="text" placeholder="Tamm" maxlength="32" />
+          </div>
+          <div class="field full-width">
+            <label for="s-personalIdCode">Estonian Personal ID Code</label>
+            <input id="s-personalIdCode" type="text" placeholder="39001010010" maxlength="11" />
+            <small>11-digit Estonian personal code.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card space-top">
+        <h2>Loan details</h2>
+        <div class="form-grid three-columns">
+          <div class="field">
+            <label for="s-loanAmount">Loan Amount (€)</label>
+            <input id="s-loanAmount" type="number" placeholder="10000" min="5000" step="100" />
+          </div>
+          <div class="field">
+            <label for="s-loanPeriodMonths">Period (months)</label>
+            <input id="s-loanPeriodMonths" type="number" placeholder="36" min="6" max="360" />
+          </div>
+          <div class="field">
+            <label for="s-interestMargin">Interest Margin (%)</label>
+            <input id="s-interestMargin" type="number" placeholder="2.5" min="0" step="0.001" />
+          </div>
+          <div class="field">
+            <label for="s-baseInterestRate">Base Interest Rate (%)</label>
+            <input id="s-baseInterestRate" type="number" placeholder="Default from backend" min="0" step="0.001" />
+            <small>Optional. Leave empty to use backend default.</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn primary" id="btn-submit" type="button">
+          <span class="spinner"></span>
+          <span class="btn-text">Submit Application →</span>
+        </button>
+      </div>
+
+      <div class="alert" id="submit-alert"></div>
+    </section>
+
+    <section class="page" id="page-review">
+      <div class="page-header">
+        <h1>Loan Review</h1>
+        <p>Load an application by ID and review the decision.</p>
+      </div>
+
+      <div class="search-row">
+        <input id="r-id" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+        <button class="btn secondary" id="btn-load" type="button">
+          <span class="spinner" id="search-spinner"></span>
+          <span class="btn-text">Load</span>
+        </button>
+      </div>
+
+      <div class="alert" id="review-alert"></div>
+
+      <div id="app-panel" class="hidden">
+        <div class="card">
+          <div class="review-head">
+            <div>
+              <h2 id="r-fullname">—</h2>
+              <p id="r-idcode">—</p>
+            </div>
+            <span class="badge" id="r-status-badge">—</span>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-item"><label>Application ID</label><div class="value" id="r-appid">—</div></div>
+            <div class="info-item"><label>Loan Amount</label><div class="value" id="r-amount">—</div></div>
+            <div class="info-item"><label>Period</label><div class="value" id="r-period">—</div></div>
+            <div class="info-item"><label>Base Rate</label><div class="value" id="r-baserate">—</div></div>
+            <div class="info-item"><label>Margin</label><div class="value" id="r-margin">—</div></div>
+            <div class="info-item"><label>Total Rate</label><div class="value" id="r-totalrate">—</div></div>
+            <div class="info-item"><label>Created At</label><div class="value" id="r-created">—</div></div>
+            <div class="info-item"><label>Rejection Reason</label><div class="value" id="r-reason">—</div></div>
+          </div>
+        </div>
+
+        <div class="card space-top" id="schedule-card">
+          <h2>Payment Schedule</h2>
+          <div class="summary-bar" id="schedule-summary"></div>
+          <div class="table-wrap" id="schedule-table-wrap">
+            <div class="empty-state"><p>No payment schedule yet.</p></div>
+          </div>
+        </div>
+
+        <div id="action-row" class="btn-row hidden">
+          <button class="btn success" id="btn-approve" type="button">Approve</button>
+          <button class="btn danger" id="btn-reject" type="button">Reject</button>
+        </div>
+
+        <div id="decision-msg" class="alert space-top"></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="reject-modal">
+    <div class="modal">
+      <h2>Reject Application</h2>
+      <p>Select a reason before rejecting the application.</p>
+      <div class="field">
+        <label for="reject-reason">Rejection Reason</label>
+        <select id="reject-reason">
+          <option value="MANUAL_REJECTION">MANUAL_REJECTION — Reviewer decision</option>
+          <option value="CUSTOMER_TOO_OLD">CUSTOMER_TOO_OLD — Age limit exceeded</option>
+        </select>
+      </div>
+      <div class="btn-row top-gap">
+        <button class="btn danger" id="btn-confirm-reject" type="button">Confirm Rejection</button>
+        <button class="btn secondary" id="btn-cancel-reject" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
